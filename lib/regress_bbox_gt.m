@@ -85,7 +85,7 @@ function [ ] = regress_bbox_gt( annolist_file, videos_dir, save_dir, scale, isSa
     save(annolist_file, 'annolist');
 end
 
-function [ bbox ] = calculate_bbox( annopoint, scale, bx, by )
+function [ bbox ] = calculate_bbox( annopoint, scale, bx, by, useIncludeUnvisiable )
     points = annopoint.point;
     
     bbox = struct();
