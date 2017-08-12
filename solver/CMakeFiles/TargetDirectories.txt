@@ -1,0 +1,1 @@
+/home/sensetime/warmer/PoseTrack-CVPR2017/posetrack/solver/CMakeFiles/pt-solver-callback.dir
