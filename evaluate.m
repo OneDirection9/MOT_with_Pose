@@ -16,7 +16,7 @@ else
     fprintf('Use ground truth to track.\n');
     save_dir = p.matDetectionsDir;
     convert_gt_anno2mat(p.trainGT, save_dir);
-    convert_gt_annox2mat(p.testGT, save_dir);
+    convert_gt_anno2mat(p.testGT, save_dir);
 end
 
 % Test model
