@@ -230,6 +230,25 @@ if eval2D
     
     printMetrics(m2d);
     dlmwrite(evalFile,m2d);
+    
+    detailFile = fullfile(resDir, 'detail2D.txt');
+    fsave = fopen(detailFile, 'w');
+    dlmwrite(detailFile, m2d);
+    for midx = 1:14
+        fprintf(fsave, [num2str(m2d(midx)), '\t']);
+    end
+    fprintf(fsave, '\n');
+    num_videos = size(allMets.mets2d, 2);
+	fprintf(fsave, 'Name\tRcll\tPrcn\tFAR\tGT\tMT\tPT\tML\tFP\tFN\tIDs\tFM\tMOTA\tMOTP\tMOTAL\n');
+    for vidx = 1:num_videos
+        res = allMets.mets2d(vidx);
+        fprintf(fsave, [res.name, '\t']);
+        for midx = 1:14
+            fprintf(fsave, [num2str(res.m(midx)), '\t']);
+        end
+        fprintf(fsave, '\n');
+    end
+    fclose(fsave);
 end    
 
 if eval3D

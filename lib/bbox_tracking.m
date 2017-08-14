@@ -145,7 +145,7 @@ for vIdx = firstidx:lastidx
     if(exist(predFname, 'file'))
        fprintf('Prediction already exist at: %s\n', predFname);
 %        bbox_vis_people(expidx, vIdx);
-       continue;
+%        continue;
     end
         
     if(exist([detFname,'.mat'], 'file') && ~bRecompute)

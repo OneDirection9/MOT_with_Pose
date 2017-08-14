@@ -28,7 +28,7 @@ start_index = 1;
 num_videos = 30;
 
 % multiple object tracking
-bbox_tracking(2, start_index, num_videos, false, true);
+% bbox_tracking(2, start_index, num_videos, false, true);
 
 % convert prediction to txt format follow MOT15 format.
 convert_prediction2txt( expidx, p.motPredictionSaveDir, p.testGT, p.ptMulticutDir, p.pruneThresh)
@@ -39,3 +39,12 @@ seqfile = fullfile(p.evlSeqmaps, 'eval.txt');
 isShowFP = 0;
 vidDir = p.vidDir;
 allMets = evaluateTracking(seqfile, p.motPredictionSaveDir, benchmarkDir, vidDir, isShowFP );
+
+% visualize bad case.
+total_videos = size(allMets.mets2d, 2);
+for vidx = 1:total_videos
+    res = allMets.mets2d(vidx);
+    if res.m(end-2) < 50
+        bbox_vis_people(expidx, vidx);
+    end
+end
