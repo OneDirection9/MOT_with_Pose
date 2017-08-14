@@ -3,7 +3,7 @@ p = bbox_exp_params(expidx);
 
 fprintf('Updating ground truth.\n');
 videos_dir = p.vidDir;
-scale = 1.1;
+scale = p.scale;
 isSave = 0;
 isShow = 0;
 useIncludeUnvisiable = p.useIncludeUnvisiable;

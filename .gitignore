@@ -1,4 +1,6 @@
-/data/videos_mot_framat/
-/data/mot-multicut/
-/data/mot-pairwise/
-/data/detections/
+data/videos_mot_framat/
+data/mot-multicut/
+data/mot-pairwise/
+data/detections/
+data/res/
+solver/

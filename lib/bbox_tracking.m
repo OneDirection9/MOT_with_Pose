@@ -143,9 +143,9 @@ for vIdx = firstidx:lastidx
     mkdir_if_missing(pathstr);
 
     if(exist(predFname, 'file'))
-%        fprintf('Prediction already exist at: %s\n', predFname);
+       fprintf('Prediction already exist at: %s\n', predFname);
 %        bbox_vis_people(expidx, vIdx);
-%        continue;
+       continue;
     end
         
     if(exist([detFname,'.mat'], 'file') && ~bRecompute)
@@ -235,9 +235,9 @@ for vIdx = firstidx:lastidx
         write_mode = 'append';
         marray_save(problemFname, dataName, pwProbSolverTemp, write_mode);
         
-        dataName = 'join-probabilities-spatial';
-        write_mode = 'append';
-        marray_save(problemFname, dataName, pwProbSolverSpat, write_mode);
+        % dataName = 'join-probabilities-spatial';
+        % write_mode = 'append';
+        % marray_save(problemFname, dataName, pwProbSolverSpat, write_mode);
         
         dataName = 'coordinates-vertices';
         marray_save(problemFname, dataName, cat(2, wDetections.frameIndex, wDetections.unPos), write_mode);
