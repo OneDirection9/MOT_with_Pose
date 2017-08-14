@@ -10,13 +10,13 @@ p.ptSolver  = fullfile(p.code_dir, 'solver/pt-solver-callback');
 p.ptFlowDir = '';
 
 p.useIncludeUnvisiable = 1;
-p.useGT = 0; % 1: true. 0: false.
+p.useGT = 1; % 1: true. 0: false.
 p.updateGT = 0; % 1: true. 0: false.
 p.flow = 0;
 
 p.cidx = 0;
 p.usedCidx = 0; % 0 or 13.
-p.pruneThresh = 10;
+p.pruneThresh = 0;
 p.maxFrameDist = 3;
 p.IOUThresh = 0.5;
 p.NMSThresh = 0.5;

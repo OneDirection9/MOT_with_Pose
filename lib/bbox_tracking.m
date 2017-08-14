@@ -70,7 +70,8 @@ cidx = p.cidx;
 % pad_orig = p.([video_set 'Pad']);
 
 fprintf('Loading temporal model from %s\n', ptPairwiseDir);
-modelName  = [ptPairwiseDir '/temporal_model_with_dist_cidx_' num2str(cidx)];
+usedCidx = p.usedCidx;
+modelName  = [ptPairwiseDir '/temporal_model_with_dist_cidx_' num2str(usedCidx)];
 temporal_model = struct;
 m = load(modelName,'temporal_model');
 temporal_model.diff = struct;
