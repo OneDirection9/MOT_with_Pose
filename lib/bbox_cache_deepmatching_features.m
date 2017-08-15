@@ -22,7 +22,7 @@ elseif ischar(nVids)
     nVids = str2num(nVids);
 end
 
-if(nargin < 6)
+if(nargin < 5)
     scale = 1;
 end
 
