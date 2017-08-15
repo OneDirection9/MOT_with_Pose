@@ -2,7 +2,7 @@ function [ ] = convert_txt2mat(source_dir, save_dir)
 % convert txt files under source_dir to mat and saved in save_dir.
 % 
 
-files = dir(source_dir);
+files = dir([source_dir, '/*.txt']);
 num_files = length(files);
 
 % empty save_dir
@@ -12,7 +12,7 @@ if(exist(save_dir))
 end
 mkdir(save_dir);
 
-for i = 3:num_files % skip `./` and `../`
+for i = 1:num_files
     fprintf('Converting detection txt `%s` to mat. %d/%d\n', files(i).name, i-2, num_files - 2);
     % read file.
     file_name = files(i).name;
