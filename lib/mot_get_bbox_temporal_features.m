@@ -30,7 +30,7 @@ for s=1:num_videos
 end
 
 if p.flow
-    dim = 16;
+    dim = 14;
 else
     dim = 11;
 end
@@ -55,7 +55,7 @@ for vIdx=1:num_videos
 
     corres_dir = fullfile(p.correspondences, vid_name);
     if(p.flow)
-        flow_dir = fullfile(p.ptFlowDir, vid_name);
+        flows_dir = fullfile(p.ptFlowDir, vid_name);
     end
 
     proposals_dir = fullfile(p.detPreposals, vid_name);
@@ -83,7 +83,7 @@ for vIdx=1:num_videos
         corres_dm_pts2 = corres_dm_pts(:,3:4);        
         
         if p.flow
-            flow_fn = fullfile(flow_dir, [fr_name1,'_',fr_name2,'.flo']);
+            flow_fn = fullfile(flows_dir, [fr_name1,'_',fr_name2,'.flo']);
             corres_flow_pts = pt_load_flow_correspondences(flow_fn);
             corres_flow_pts1 = corres_flow_pts(:,1:2);
             corres_flow_pts2 = corres_flow_pts(:,3:4);
@@ -125,8 +125,9 @@ for vIdx=1:num_videos
                     idxs_bbox_pair = idxAllProposal(idxsPair, :);
                     feat_dm = bbox_get_temporal_features_img_dm(p, proposals1, corres_dm_pts1, proposals2, corres_dm_pts2, idxs_bbox_pair);
                     if p.flow
-                        feat_dm = bbox_get_temporal_features_img_dm(p, proposals1, corres_dm_pts1, proposals2, corres_dm_pts2, idxs_bbox_pair);
-                        feat = cat(2, feat_dm, feat_flow(:,1:5));
+                        feat_flow = bbox_get_temporal_features_img_dm(p, proposals1, corres_flow_pts1, proposals2, corres_flow_pts2, idxs_bbox_pair);
+                        feat = cat(2, feat_dm, feat_flow(:,1));
+                        feat = cat(2, feat, feat_flow(:, 3:4));
                     else
                         feat = feat_dm;
                     end
@@ -141,8 +142,9 @@ for vIdx=1:num_videos
                     idxs_bbox_pair = idxAllProposal(idxsPair, :);
                     feat_dm = bbox_get_temporal_features_img_dm(p, proposals1, corres_dm_pts1, proposals2, corres_dm_pts2, idxs_bbox_pair);
                     if p.flow
-                        feat_dm = bbox_get_temporal_features_img_dm(p, proposals1, corres_dm_pts1, proposals2, corres_dm_pts2, idxs_bbox_pair);
-                        feat = cat(2, feat_dm, feat_flow(:,1:5));
+                        feat_flow = bbox_get_temporal_features_img_dm(p, proposals1, corres_flow_pts1, proposals2, corres_flow_pts2, idxs_bbox_pair);
+                        feat = cat(2, feat_dm, feat_flow(:,1));
+                        feat = cat(2, feat, feat_flow(:, 3:4));
                     else
                         feat = feat_dm;
                     end

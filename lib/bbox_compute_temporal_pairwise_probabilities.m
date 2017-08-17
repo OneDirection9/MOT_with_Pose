@@ -1,6 +1,10 @@
-function [ pwProb ] = bbox_compute_temporal_pairwise_probabilities(p, detections, temporal_model, cidx, fn, corres_dir)
+function [ pwProb ] = bbox_compute_temporal_pairwise_probabilities(p, detections, temporal_model, cidx, fn, corres_dir, flows_dir)
 %PT_COMPUTE_PAIRWISE_PROBABILITIES Summary of this function goes here
 %   Detailed explanation goes here
+
+if (nargin < 7)
+    p.flow = false;
+end
 
 if (ischar(cidx))
     cidx = str2num(cidx);
@@ -133,6 +137,15 @@ for f = 1:size(frame_pairs,1)
     locs2 = cat(2, dets2.unPos, dets2.scale, dets2.unProb);
     
     feat = bbox_get_temporal_features_img_dm(p, locs1, corres_pts1, locs2, corres_pts2, dRel);
+    if p.flow
+        flow_fn = fullfile(flows_dir, [fr_name1,'_',fr_name2,'.flo']);
+        corres_flow_pts = pt_load_flow_correspondences(flow_fn);
+        corres_flow_pts1 = corres_flow_pts(:,1:2);
+        corres_flow_pts2 = corres_flow_pts(:,3:4);
+        feat_flow = bbox_get_temporal_features_img_dm(p, locs1, corres_flow_pts1, locs2, corres_flow_pts2, dRel);
+        feat = cat(2, feat, feat_flow(:, 1));
+        feat = cat(2, feat, feat_flow(:, 3:4));
+    end
 %     feat = feat(:,1:5);
     feat_norm = getFeatNorm(feat,temporal_model.diff.training_opts.X_min,temporal_model.diff.training_opts.X_max);
     ex = sparse(double(feat_norm));

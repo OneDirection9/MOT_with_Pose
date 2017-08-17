@@ -43,9 +43,9 @@ for i = 1:num_pairs
     feat(i, 5) = feat(i,2).^2;
     
     % dist: [ x', y', w', h']
-    dist = pt1_size1*scale1 - pt2_size2*scale1; % multiply only with one of the scales.
-    feat(i,6:7) = dist(1:2);
-    feat(i,8) = norm(dist(1:2));
+%     dist = pt1_size1*scale1 - pt2_size2*scale1; % multiply only with one of the scales.
+%     feat(i,6:7) = dist(1:2);
+%     feat(i,8) = norm(dist(1:2));
     
     center1_x = pt1_size1(1) + pt1_size1(3)/2;
     center1_y = pt1_size1(2) + pt1_size1(4)/2;
