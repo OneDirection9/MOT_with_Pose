@@ -31,7 +31,11 @@ num_videos = 30;
 % bbox_tracking(2, start_index, num_videos, false, true);
 
 % convert prediction to txt format follow MOT15 format.
-convert_prediction2txt( expidx, p.motPredictionSaveDir, p.testGT, p.ptMulticutDir, p.pruneThresh)
+curDir = fullfile(p.expDir, 'thresh02_pre');
+curSaveDir = fullfile(p.expDir, 'thresh02_pre_prune');
+% convert_prediction2txt( expidx, p.motPredictionSaveDir, p.testGT,
+% p.ptMulticutDir, p.pruneThresh);
+convert_prediction2txt( expidx, p.motPredictionSaveDir, p.testGT, curDir, p.pruneThresh, curSaveDir);
 
 % evaluate the performance.
 benchmarkDir = p.motDir;
@@ -45,6 +49,6 @@ total_videos = size(allMets.mets2d, 2);
 for vidx = 1:total_videos
     res = allMets.mets2d(vidx);
     if res.m(end-2) < 50
-        bbox_vis_people(expidx, vidx);
+        % bbox_vis_people(expidx, vidx, curDir);
     end
 end

@@ -1,4 +1,4 @@
-function [ ] = convert_prediction2txt( expidx, save_dir, annolist_test, prediction_dir, pruneThresh )
+function [ ] = convert_prediction2txt( expidx, save_dir, annolist_test, prediction_dir, pruneThresh, curSaveDir )
 %GENERATE_MOT_DET Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -19,6 +19,7 @@ function [ ] = convert_prediction2txt( expidx, save_dir, annolist_test, predicti
         save_file = fullfile(save_dir, [vname '.txt']);
         fsave = fopen(save_file, 'w');
         
+        prediction_save_file = fullfile(curSaveDir, ['/prediction_' num2str(expidx) '_' vname]);
         % prediction result.
         pred_file = fullfile(prediction_dir, ['/prediction_' num2str(expidx) '_' vname]);
         load(pred_file, 'people');
@@ -34,10 +35,18 @@ function [ ] = convert_prediction2txt( expidx, save_dir, annolist_test, predicti
             num_ = size(indexs, 1);
             
             if(num_ <= pruneThresh)
+                people.unLab(indexs, 1) = 0;
                 continue;
             end
+            cpeople = MultiScaleDetections.slice(people, indexs);
+            people = MergeWithinFrame(people, cpeople, num_frames);
+            
             for i = 1:num_
                 index = indexs(i);
+                isValid = people.unLab(index, 1);
+                if isValid == 0
+                    continue;
+                end
                 bbox = people.unPos(index, :);
                 fidx = people.frameIndex(index, :);
                 fprintf(fsave, [num2str(fidx), ',']); % frame index
@@ -52,6 +61,25 @@ function [ ] = convert_prediction2txt( expidx, save_dir, annolist_test, predicti
                 fprintf(fsave, [num2str(-1), ',']); % Z
                 fprintf(fsave, '\n');
             end
+        end
+        
+        save(prediction_save_file, 'people');
+    end
+end
+
+function [ people ] = MergeWithinFrame(people, cpeople, num_frames)
+    for fidx = 1:num_frames
+        idxs = find(cpeople.frameIndex == fidx);
+        num_dets = size(idxs, 1);
+        if num_dets > 1
+            indexs = cpeople.index(idxs);
+            people.unLab(indexs, 1) = 0;
+            
+            probs = cpeople.unProb(idxs);
+            [~, max_idx] = max(probs);
+            idd = idxs(max_idx);
+            index = cpeople.index(idd);
+            people.unLab(index, 1) = 1;
         end
     end
 end

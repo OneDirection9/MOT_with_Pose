@@ -46,6 +46,15 @@ for i = 1:num_pairs
     dist = pt1_size1*scale1 - pt2_size2*scale1; % multiply only with one of the scales.
     feat(i,6:7) = dist(1:2);
     feat(i,8) = norm(dist(1:2));
+    
+    center1_x = pt1_size1(1) + pt1_size1(3)/2;
+    center1_y = pt1_size1(2) + pt1_size1(4)/2;
+    center2_x = pt2_size2(1) + pt2_size2(3)/2;
+    center2_y = pt2_size2(2) + pt2_size2(4)/2;
+    feat(i, 6) = center1_x - center2_x;
+    feat(i, 7) = center1_y - center2_y;
+    feat(i, 8) = norm(feat(i, 6:7));
+    
     feat(i,9:10) = feat(i,6:7).^2;
     feat(i,11) = feat(i,8)^2;
     
