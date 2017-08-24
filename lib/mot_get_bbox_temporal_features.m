@@ -112,6 +112,9 @@ for vIdx=1:num_videos
                 
                 proposals1 = mot_generate_proposal_candidates(proposal_fn1, p, gt_bbox1);
                 proposals2 = mot_generate_proposal_candidates(proposal_fn2, p, gt_bbox2);
+                if(isempty(proposals1) || isempty(proposals2))
+                    continue;
+                end
                 
                 idxs_proposal1 = (1: size(proposals1, 1));
                 idxs_proposal2 = (1: size(proposals2, 1));
