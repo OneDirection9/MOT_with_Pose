@@ -23,6 +23,9 @@ for i = 1:num_files
     % fields: unPos, unProb, frameIndex, index, scale, partClass.
     detections = struct();
     detections.unPos = [xs, ys, ws, hs];
+    
+    scores = min(1 - 1e-15, scores);
+    scores = max(1e-15, scores);
     detections.unProb = scores;
     detections.frameIndex = names;
     detections.index = [1:size(names,1)]';
