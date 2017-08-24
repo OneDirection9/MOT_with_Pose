@@ -80,6 +80,7 @@ function [ ] = regress_bbox_gt( annolist_file, videos_dir, save_dir, scale, isSa
         
         annolist(vidx).bbox = vinfo.bbox;
         annolist(vidx).scale = scale;
+        annolist(vidx).useIncludeUnvisiable = useIncludeUnvisiable;
     end
     % save in the mat.
     save(annolist_file, 'annolist');

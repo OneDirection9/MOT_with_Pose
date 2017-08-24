@@ -1,4 +1,4 @@
-function bbox_cache_deepmatching_features(expidx, video_set, firstidx, nVids)
+function bbox_cache_deepmatching_features(expidx, video_set, firstidx, nVids, scale)
 
 p = bbox_exp_params(expidx);
 
@@ -22,6 +22,10 @@ elseif ischar(nVids)
     nVids = str2num(nVids);
 end
 
+if(nargin < 5)
+    scale = 1;
+end
+
 lastidx = firstidx + nVids - 1;
 if (lastidx > num_videos)
     lastidx = num_videos;
@@ -30,21 +34,33 @@ end
 % params
 overwrite = false;
 
+switch scale
+    case 1
+        cacheDir = p.correspondences;
+        vidDir = p.vidDir;
+    case 1.2
+        cacheDir = p.correspondencesScale1_2;
+        vidDir = p.vidDir1_2;
+    case 0.8
+        cacheDir = p.correspondencesScale0_8;
+        vidDir = p.vidDir0_8;
+end
+
 for vid_idx = firstidx:lastidx
 
     vid_name = annolist(vid_idx).name;
     
-    cache_dir = fullfile(p.correspondences, vid_name);
+    cache_dir = fullfile(cacheDir, vid_name);
     mkdir_if_missing(cache_dir);
     fprintf('save dir %s\n', cache_dir);
     
-    vid_dir = fullfile(p.vidDir, vid_name);
+    vid_dir = fullfile(vidDir, vid_name);
     num_frames = annolist(vid_idx).num_frames;
     fn = dir([vid_dir,'/*.jpg']);
     
     assert(length(fn) == num_frames)
 
-    frame_pairs = pt_build_frame_pairs(num_frames, p.maxFrameDist);
+    frame_pairs = bbox_build_frame_pairs(num_frames, p.maxFrameDist);
     
     deepmatching = p.deepMatching;
     

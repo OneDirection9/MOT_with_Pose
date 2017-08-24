@@ -7,16 +7,17 @@ p.code_dir = pwd();
 p.dependencyDir = '/media/sensetime/1C2E42932E4265BC/pose_track_data/bonn-multiperson-posetrack';
 p.expDir = fullfile(p.code_dir, 'data');
 p.ptSolver  = fullfile(p.code_dir, 'solver/pt-solver-callback');
-p.ptFlowDir = '';
 
-p.useIncludeUnvisiable = 1;
+p.useIncludeUnvisiable = 1; % 1: use unvisiable keypoint to regress bbox.
+p.scale = 1.1;
 p.useGT = 0; % 1: true. 0: false.
 p.updateGT = 0; % 1: true. 0: false.
 p.flow = 0;
 
 p.cidx = 0;
+p.usedCidx = 0; % 0 or 13.
 p.pruneThresh = 10;
-p.maxFrameDist = 3;
+p.maxFrameDist = 2;
 p.IOUThresh = 0.5;
 p.NMSThresh = 0.5;
 
@@ -27,7 +28,7 @@ switch expidx
     case 1
         p.name = 'Multiple Object Tracking';
         
-        p.temporalWinSize = 10;
+        p.temporalWinSize = 11;
         p.trackMinLen = 0;
         
         p.testGT = fullfile(p.expDir, '/annolist/test/annolist');
@@ -50,8 +51,11 @@ switch expidx
         p.net_def_file = 'ResNet-101-FCN_out_14_sigmoid_locreg_allpairs_test.prototxt';
         p.net_bin_file = 'ResNet-101-mpii-multiperson.caffemodel';
         
+        p.ptFlowDir = fullfile(p.dependencyDir, 'flow');
         p.vidDir = fullfile(p.dependencyDir, 'videos');
         p.correspondences = fullfile(p.dependencyDir, 'correspondences');
+        p.cropedDetections = fullfile(p.dependencyDir, 'detections_img');
+        p.reid = fullfile(p.dependencyDir, 'reid');
         
         p.corresName = '%05d_%05d.txt';
         p.stride = 8;
@@ -92,7 +96,6 @@ switch expidx
         p.multi_people = true;
         p.time_limit = 86400;
         
-        p.scale = 4;
         p.colorIdxs = [5 1];
         p.refHeight = 400;
 

@@ -70,7 +70,8 @@ cidx = p.cidx;
 % pad_orig = p.([video_set 'Pad']);
 
 fprintf('Loading temporal model from %s\n', ptPairwiseDir);
-modelName  = [ptPairwiseDir '/temporal_model_with_dist_cidx_' num2str(cidx)];
+usedCidx = p.usedCidx;
+modelName  = [ptPairwiseDir '/temporal_model_with_dist_cidx_' num2str(usedCidx)];
 temporal_model = struct;
 m = load(modelName,'temporal_model');
 temporal_model.diff = struct;
@@ -128,6 +129,7 @@ for vIdx = firstidx:lastidx
     fn          = dir([vid_dir,'/*.jpg']);
     frame_pairs = bbox_build_frame_pairs(num_frames, p.maxFrameDist);
     corres_dir = fullfile(p.correspondences, vid_name);
+    flows_dir = fullfile(p.ptFlowDir, vid_name);
     
     detPerFrame = zeros(num_frames,1); 
     detections = [];
@@ -142,7 +144,7 @@ for vIdx = firstidx:lastidx
     mkdir_if_missing(pathstr);
 
     if(exist(predFname, 'file'))
-%        fprintf('Prediction already exist at: %s\n', predFname);
+       fprintf('Prediction already exist at: %s\n', predFname);
 %        bbox_vis_people(expidx, vIdx);
 %        continue;
     end
@@ -175,7 +177,7 @@ for vIdx = firstidx:lastidx
         pwProbTemporal = [];
         
         fprintf('Computing temporal pairwise probabilities. Part = %d\n',cidx);
-        pwProb = bbox_compute_temporal_pairwise_probabilities(p, wDetections, temporal_model, cidx, fn, corres_dir);
+        pwProb = bbox_compute_temporal_pairwise_probabilities(p, wDetections, temporal_model, cidx, fn, corres_dir, flows_dir);
         pwProbTemporal = [pwProbTemporal;pwProb];
         
         % compute spatial probability.
@@ -234,9 +236,9 @@ for vIdx = firstidx:lastidx
         write_mode = 'append';
         marray_save(problemFname, dataName, pwProbSolverTemp, write_mode);
         
-        dataName = 'join-probabilities-spatial';
-        write_mode = 'append';
-        marray_save(problemFname, dataName, pwProbSolverSpat, write_mode);
+        % dataName = 'join-probabilities-spatial';
+        % write_mode = 'append';
+        % marray_save(problemFname, dataName, pwProbSolverSpat, write_mode);
         
         dataName = 'coordinates-vertices';
         marray_save(problemFname, dataName, cat(2, wDetections.frameIndex, wDetections.unPos), write_mode);

@@ -1,6 +1,6 @@
-function [] = bbox_vis_people(expidx, vIdx, options)
+function [] = bbox_vis_people(expidx, vIdx, multicutDir, options)
 
-if(nargin < 3)
+if(nargin < 4)
     options.minTrackLen = 6;
     options.minAvgJoints = 5;
 end
@@ -14,6 +14,10 @@ p = bbox_exp_params(expidx);
 % exp_dir = fullfile(p.expDir, p.shortName);
 load(p.testGT,'annolist');
 
+if(nargin < 3)
+    multicutDir = p.ptMulticutDir;
+end
+
 fprintf('vididx: %d\n',vIdx);
 ann = annolist(vIdx);
 vid_name    = ann.name;
@@ -21,7 +25,7 @@ vid_dir     = fullfile(p.vidDir, vid_name);
 num_frames  = ann.num_frames;
 fn          = dir([vid_dir,'/*.jpg']);
 
-load([p.ptMulticutDir '/prediction_' num2str(expidx) '_' vid_name], 'people');
+load([multicutDir '/prediction_' num2str(expidx) '_' vid_name], 'people');
 
 for fidx = 1:num_frames 
     fprintf('Frame: %d/%d\n', fidx, num_frames);
