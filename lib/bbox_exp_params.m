@@ -55,6 +55,7 @@ switch expidx
         p.vidDir = fullfile(p.dependencyDir, 'videos');
         p.correspondences = fullfile(p.dependencyDir, 'correspondences');
         p.cropedDetections = fullfile(p.dependencyDir, 'detections_img');
+        p.cropedProposals = fullfile(p.dependencyDir, 'proposals_img');
         p.reid = fullfile(p.dependencyDir, 'reid');
         
         p.corresName = '%05d_%05d.txt';
