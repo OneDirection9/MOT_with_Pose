@@ -13,6 +13,7 @@ p.scale = 1.1;
 p.useGT = 0; % 1: true. 0: false.
 p.updateGT = 0; % 1: true. 0: false.
 p.flow = 0;
+p.useReid = 1;
 
 p.cidx = 0;
 p.usedCidx = 0; % 0 or 13.
@@ -45,6 +46,7 @@ switch expidx
         p.motDir = fullfile(p.expDir, 'videos_mot_framat/');
         p.evlSeqmaps = fullfile(p.expDir, 'seqmaps');
         p.detPreposals = fullfile(p.expDir, 'proposals');
+        p.reid = fullfile(p.expDir, 'reid');
         
         p.pairwise_relations = fullfile(p.code_dir, '/../deepcut/data/pairwise/all_pairs_stats_all.mat');
         p.net_dir = fullfile(p.code_dir, '../deepcut/data/caffe-models');
@@ -56,7 +58,8 @@ switch expidx
         p.correspondences = fullfile(p.dependencyDir, 'correspondences');
         p.cropedDetections = fullfile(p.dependencyDir, 'detections_img');
         p.cropedProposals = fullfile(p.dependencyDir, 'proposals_img');
-        p.reid = fullfile(p.dependencyDir, 'reid');
+        p.proposalsFeatures = fullfile(p.dependencyDir, 'proposals_features');
+        
         
         p.corresName = '%05d_%05d.txt';
         p.stride = 8;

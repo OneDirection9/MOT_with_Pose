@@ -130,6 +130,7 @@ for vIdx = firstidx:lastidx
     frame_pairs = bbox_build_frame_pairs(num_frames, p.maxFrameDist);
     corres_dir = fullfile(p.correspondences, vid_name);
     flows_dir = fullfile(p.ptFlowDir, vid_name);
+    reid_file = fullfile(p.reid, vid_name);
     
     detPerFrame = zeros(num_frames,1); 
     detections = [];
@@ -171,13 +172,14 @@ for vIdx = firstidx:lastidx
             fprintf('Window %d/%d: Previous: %d \t New: %d\n', w, size(temporalWindows, 1), size(prev_dets.unProb,1), size(wDetections.unProb,1));
             wDetections = MultiScaleDetections.merge(prev_dets, wDetections); 
         end
+        origin_index = wDetections.index;
         wDetections.index = [1:size(wDetections.unProb,1)]';
         fprintf('Number of Detections: %d\n', size(wDetections.unProb,1));
                     
         pwProbTemporal = [];
         
         fprintf('Computing temporal pairwise probabilities. Part = %d\n',cidx);
-        pwProb = bbox_compute_temporal_pairwise_probabilities(p, wDetections, temporal_model, cidx, fn, corres_dir, flows_dir);
+        pwProb = bbox_compute_temporal_pairwise_probabilities(p, wDetections, temporal_model, cidx, fn, corres_dir, flows_dir, origin_index, reid_file);
         pwProbTemporal = [pwProbTemporal;pwProb];
         
         % compute spatial probability.
