@@ -21,6 +21,7 @@ end
 fprintf('vididx: %d\n',vIdx);
 ann = annolist(vIdx);
 vid_name    = ann.name;
+fprintf('video name: %s\n', vid_name);
 vid_dir     = fullfile(p.vidDir, vid_name);
 num_frames  = ann.num_frames;
 fn          = dir([vid_dir,'/*.jpg']);
@@ -61,7 +62,8 @@ for fidx = 1:num_frames
         text(pos(1)+5, pos(2)+15, num2str(cluster), 'FontSize', 20);
     end 
     
-    pause(0.001);
+    % pause(0.001);
+    pause();
 end
 close all;
 end

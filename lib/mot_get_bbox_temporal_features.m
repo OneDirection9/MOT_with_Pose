@@ -14,7 +14,7 @@ if exist(save_file, 'file') == 2
     fprintf('Loading feature file: %s\n', save_file);
     load(save_file);
     fprintf('Loaded %s\n',save_file);
-    return;
+    % return;
 end
 
 fprintf('Loading annotations from: %s\n', p.trainGT);
@@ -29,10 +29,13 @@ for s=1:num_videos
     num_persons = num_persons + annolist(s).num_persons;        
 end
 
+dim = 11;
 if p.flow
-    dim = 14;
-else
-    dim = 11;
+    dim = dim + 3;
+end
+
+if p.useReid
+    dim = dim + 1;
 end
 
 % initialize the arrays, otherwise too slow when using cat
@@ -54,10 +57,15 @@ for vIdx=1:num_videos
     frame_pairs = bbox_build_frame_pairs(num_frames, p.maxFrameDist);
 
     corres_dir = fullfile(p.correspondences, vid_name);
-    if(p.flow)
+    if p.flow
         flows_dir = fullfile(p.ptFlowDir, vid_name);
     end
-
+    
+    if p.useReid
+        features_dir = fullfile(p.proposalsFeatures, vid_name);
+        assert(size(dir([features_dir, '/*.mat']), 1) == num_frames, 'Feature files != num_frames');
+    end
+    
     proposals_dir = fullfile(p.detPreposals, vid_name);
     assert(size(dir(proposals_dir), 1) - 2 == num_frames, 'Proposal files != num_frames');
     
@@ -88,7 +96,16 @@ for vIdx=1:num_videos
             corres_flow_pts1 = corres_flow_pts(:,1:2);
             corres_flow_pts2 = corres_flow_pts(:,3:4);
         end
-
+        
+        if p.useReid
+            fr1_features_file = fullfile(features_dir, fr_name1);
+            fr1_features = load(fr1_features_file);
+            fr1_features = fr1_features.feature;
+            fr2_features_file = fullfile(features_dir, fr_name2);
+            fr2_features = load(fr2_features_file);
+            fr2_features = fr2_features.feature;
+        end
+        
         proposal_fn1 = fullfile(proposals_dir, fr_name1);
         proposal_fn2 = fullfile(proposals_dir, fr_name2);
         
@@ -134,6 +151,12 @@ for vIdx=1:num_videos
                     else
                         feat = feat_dm;
                     end
+                    
+                    if p.useReid
+                        feat_reid = bbox_get_temporal_features_img_reid(p, proposals1, fr1_features, proposals2, fr2_features, idxs_bbox_pair);
+                        feat = cat(2, feat, feat_reid);
+                    end
+                    
                     idxs = n_pos+1:n_pos+size(feat,1);
                     X_pos(idxs,:) = feat;
                     n_pos = n_pos + size(feat,1);
@@ -151,6 +174,12 @@ for vIdx=1:num_videos
                     else
                         feat = feat_dm;
                     end
+                    
+                    if p.useReid
+                        feat_reid = bbox_get_temporal_features_img_reid(p, proposals1, fr1_features, proposals2, fr2_features, idxs_bbox_pair);
+                        feat = cat(2, feat, feat_reid);
+                    end
+                    
                     idxs = n_neg+1:n_neg+size(feat,1);
                     X_neg(idxs,:) = feat;
                     n_neg = n_neg + size(feat,1);

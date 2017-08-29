@@ -130,6 +130,7 @@ for vIdx = firstidx:lastidx
     frame_pairs = bbox_build_frame_pairs(num_frames, p.maxFrameDist);
     corres_dir = fullfile(p.correspondences, vid_name);
     flows_dir = fullfile(p.ptFlowDir, vid_name);
+    reid_file = fullfile(p.reid, vid_name);
     
     detPerFrame = zeros(num_frames,1); 
     detections = [];
@@ -166,18 +167,21 @@ for vIdx = firstidx:lastidx
         wDetections = MultiScaleDetections.slice(detections, idxs);
         wDetections.unLab = zeros(size(wDetections.unProb,1),2,unLab_cls);
         wDetections.unLab(:,:) = max_sizet_val;
-
+        origin_detections = copy_detections(wDetections);
         if(w > 1)
             fprintf('Window %d/%d: Previous: %d \t New: %d\n', w, size(temporalWindows, 1), size(prev_dets.unProb,1), size(wDetections.unProb,1));
-            wDetections = MultiScaleDetections.merge(prev_dets, wDetections); 
+            wDetections = MultiScaleDetections.merge(prev_dets, wDetections);
+            origin_detections = MultiScaleDetections.merge(pre_origin_detections, origin_detections);
         end
+        pre_origin_detections = origin_detections;
+        origin_index = pre_origin_detections.index;
         wDetections.index = [1:size(wDetections.unProb,1)]';
         fprintf('Number of Detections: %d\n', size(wDetections.unProb,1));
                     
         pwProbTemporal = [];
         
         fprintf('Computing temporal pairwise probabilities. Part = %d\n',cidx);
-        pwProb = bbox_compute_temporal_pairwise_probabilities(p, wDetections, temporal_model, cidx, fn, corres_dir, flows_dir);
+        pwProb = bbox_compute_temporal_pairwise_probabilities(p, wDetections, temporal_model, cidx, fn, corres_dir, flows_dir, origin_index, reid_file);
         pwProbTemporal = [pwProbTemporal;pwProb];
         
         % compute spatial probability.
@@ -236,9 +240,9 @@ for vIdx = firstidx:lastidx
         write_mode = 'append';
         marray_save(problemFname, dataName, pwProbSolverTemp, write_mode);
         
-        % dataName = 'join-probabilities-spatial';
-        % write_mode = 'append';
-        % marray_save(problemFname, dataName, pwProbSolverSpat, write_mode);
+%         dataName = 'join-probabilities-spatial';
+%         write_mode = 'append';
+%         marray_save(problemFname, dataName, pwProbSolverSpat, write_mode);
         
         dataName = 'coordinates-vertices';
         marray_save(problemFname, dataName, cat(2, wDetections.frameIndex, wDetections.unPos), write_mode);

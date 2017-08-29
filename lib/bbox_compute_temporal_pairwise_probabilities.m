@@ -1,8 +1,8 @@
-function [ pwProb ] = bbox_compute_temporal_pairwise_probabilities(p, detections, temporal_model, cidx, fn, corres_dir, flows_dir)
+function [ pwProb ] = bbox_compute_temporal_pairwise_probabilities(p, detections, temporal_model, cidx, fn, corres_dir, flows_dir, origin_index, reid_file)
 %PT_COMPUTE_PAIRWISE_PROBABILITIES Summary of this function goes here
 %   Detailed explanation goes here
 
-if (nargin < 7)
+if (nargin < 8)
     p.flow = false;
 end
 
@@ -146,6 +146,17 @@ for f = 1:size(frame_pairs,1)
         feat = cat(2, feat, feat_flow(:, 1));
         feat = cat(2, feat, feat_flow(:, 3:4));
     end
+    
+    if p.useReid
+        f1_det_idxs = origin_index(detections.frameIndex == fPair(1));
+        f2_det_idxs = origin_index(detections.frameIndex == fPair(2));
+        dRelIdx = [f1_det_idxs(dRel(:,1)), f2_det_idxs(dRel(:, 2))];
+        diff_ = load(reid_file, 'diff');
+        diff_ = diff_.diff;
+        det_diff = diag(diff_(dRelIdx(:,1), dRelIdx(:,2)));
+        feat = cat(2, feat, det_diff);
+    end
+    
 %     feat = feat(:,1:5);
     feat_norm = getFeatNorm(feat,temporal_model.diff.training_opts.X_min,temporal_model.diff.training_opts.X_max);
     ex = sparse(double(feat_norm));

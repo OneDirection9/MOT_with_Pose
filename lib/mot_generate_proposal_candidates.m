@@ -24,7 +24,7 @@ locations = bbox(idxs, :);
 scores = pred_scores(idxs);
 scales = ones(size(idxs,1), 1);
 
-proposals = cat(2, locations, scales, scores);
+proposals = cat(2, locations, idxs, scales, scores);
 
 % NMS - not needed.
 % proposals_nms = topleft_bottomdown(idxs, :);
