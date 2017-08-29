@@ -314,7 +314,7 @@ function [] = drawFP(gtinfo, stI, allfalsepos, vidDir, seqName)
             rectangle('Position', pos, 'EdgeColor', color, 'LineWidth', lineWidth);
             text(pos(1)+5, pos(2)+15, 'fp', 'FontSize', 20);
         end
-        pause(0.001);
+        pause();
     end
     close all;
 end
