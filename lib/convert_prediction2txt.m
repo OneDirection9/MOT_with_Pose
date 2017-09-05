@@ -9,6 +9,8 @@ function [ ] = convert_prediction2txt( expidx, save_dir, annolist_test, predicti
     
     num_videos = size(annolist, 1);
     
+    mkdir_if_missing(curSaveDir);
+    
     for vidx = 1:num_videos
         fprintf('Converting prediction to txt: `%s`. Videos: %d/%d\n', annolist(vidx,:).name, vidx, num_videos);
         % video name

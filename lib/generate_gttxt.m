@@ -2,6 +2,11 @@ function [] = generate_gttxt( annolist_file, save_dir, usage )
     
     load(annolist_file);
     
+    if exist(save_dir, 'dir')
+        rmdir(save_dir, 's');
+    end
+    mkdir(save_dir);
+        
     num_videos = size(annolist, 1);
     
     for vidx = 1:num_videos
@@ -14,6 +19,9 @@ function [] = generate_gttxt( annolist_file, save_dir, usage )
         num_persons = vinfo.num_persons;
         fbbox = vinfo.bbox;
         
+        % generate img1 , det.
+        mkdir(fullfile(save_dir, vname, 'det'));
+        mkdir(fullfile(save_dir, vname, 'img1'));
         % save in the gt/gt.txt
         save_result_dir = fullfile(save_dir, vname, 'gt');
         mkdir_if_missing(save_result_dir);

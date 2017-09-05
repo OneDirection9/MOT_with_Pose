@@ -7,8 +7,13 @@ function [ ] = regress_bbox_gt( annolist_file, videos_dir, save_dir, scale, isSa
     
     [file_path, file_name, ~] = fileparts(annolist_file);
     
+    if isSave
+        if exist(save_dir, 'dir')
+            rmdir(save_dir, 's');
+        end
+        mkdir(save_dir);
+    end
     num_videos = size(annolist, 1);
-    
     for vidx = 1:num_videos
         fprintf('Regressing bbox: %s(%d/%d).\n', annolist(vidx, :).name, vidx, num_videos);
         
@@ -21,15 +26,27 @@ function [ ] = regress_bbox_gt( annolist_file, videos_dir, save_dir, scale, isSa
         
         fimages = dir([video_dir,'/*.jpg']);
         
-        video_save_dir = fullfile(save_dir, vname);
-        if(exist(video_save_dir))
-            rmdir(video_save_dir, 's');
+        if isSave
+            video_save_dir = fullfile(save_dir, vname);
+            if exist(video_save_dir, 'dir')
+                rmdir(video_save_dir, 's');
+            end
+            mkdir_if_missing(video_save_dir);
         end
-        mkdir_if_missing(video_save_dir);
         % add field: bbox.
         vinfo.bbox = cell( num_persons, num_frames);
         for fidx = 1:num_frames
-            % fprintf('Regressing bbox: %s(%d/%d). Frames: %d/%d\n', annolist(vidx, :).name, vidx, num_videos, fidx, num_frames);
+            empty = 0;
+            for pidx = 1:num_persons
+                if isempty(vinfo.annopoints{pidx, fidx})
+                    empty = empty + 1;
+                end
+            end
+            if empty == num_persons
+                continue;
+            end
+            
+            fprintf('Regressing bbox: %s(%d/%d). Frames: %d/%d\n', annolist(vidx, :).name, vidx, num_videos, fidx, num_frames);
             image_name = fimages(fidx).name;
             fimage = fullfile(video_dir, image_name);
             img = imread(fimage);
@@ -63,10 +80,13 @@ function [ ] = regress_bbox_gt( annolist_file, videos_dir, save_dir, scale, isSa
                 end
             end
             
-            save_name = fullfile(video_save_dir, image_name);
             % save figures.
             if(isSave)
-                print(gcf, '-r300', '-djpeg', save_name);
+                save_name = fullfile(video_save_dir, image_name);
+                % print(gcf, '-r300', '-djpeg', save_name);
+                frame = getframe;
+                im = frame2im(frame);
+                imwrite(im, save_name, 'jpg');
             end
             
             if(isShow)
