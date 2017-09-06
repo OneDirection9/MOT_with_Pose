@@ -1,7 +1,11 @@
+data/
+data/annolist/train/
+data/annolist/test/
 data/videos_mot_framat/
 data/mot-multicut/
 data/mot-pairwise/
 data/detections/
 data/detections_txt/
 data/res/
+data/proposals/
 solver/

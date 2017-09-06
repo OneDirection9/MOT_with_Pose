@@ -43,7 +43,7 @@ function [ output_args ] = draw_bbox_detection( videos_dir, annolist_file, detec
             % save file.
             save_name = fullfile(video_save_dir, fimg_name);
             % print(gcf, '-r300', '-djpeg', save_name);
-            pause(0.001);
+            pause();
         end
         close all;
     end

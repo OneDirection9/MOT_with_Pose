@@ -4,7 +4,7 @@ p = [];
 
 p.code_dir = pwd();
 
-p.dependencyDir = '/media/sensetime/1C2E42932E4265BC/pose_track_data/bonn-multiperson-posetrack';
+p.dependencyDir = '/media/sensetime/1C2E42932E4265BC/challenge';
 p.expDir = fullfile(p.code_dir, 'data');
 p.ptSolver  = fullfile(p.code_dir, 'solver/pt-solver-callback');
 

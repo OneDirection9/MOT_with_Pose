@@ -297,7 +297,7 @@ for vIdx = firstidx:lastidx
         save(predFname, 'people');
     end 
     % visualise predictions
-    bbox_vis_people(expidx, vIdx);
+    % bbox_vis_people(expidx, vIdx);
 end  
 
 fprintf('done\n');

@@ -28,7 +28,7 @@ for idx = 3:num_videos % skip ./ and ../
         f_full_path = fullfile(p_dir, f_full_name);
         [~, f_name, ~] = fileparts(f_full_path);
         save_dir = fullfile(croped_pro_dir, vname, f_name);
-        if(exist(save_dir))
+        if(exist(save_dir, 'dir'))
             rmdir(save_dir, 's');
         end
         mkdir(save_dir);

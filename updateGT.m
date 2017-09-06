@@ -4,8 +4,8 @@ p = bbox_exp_params(expidx);
 fprintf('Updating ground truth.\n');
 videos_dir = p.vidDir;
 scale = p.scale;
-isSave = 0;
-isShow = 0;
+isSave = 1;
+isShow = 1;
 useIncludeUnvisiable = p.useIncludeUnvisiable;
 % calculate bbox and save in annolist
 annolist_train = p.trainGT;
