@@ -1,4 +1,6 @@
+% image save dir if isSave = 1
 save_dir = '/media/sensetime/1C2E42932E4265BC/challenge/tmp';
+% image path prefix.
 prefix = '/media/sensetime/1C2E42932E4265BC/challenge';
 isSave = 0;
 
