@@ -11,6 +11,7 @@ if (~isdeployed)
     addpath('../deepcut/lib/multicut');
     addpath('../deepcut/lib/multicut/hdf5');
     addpath('./lib');
+    addpath('./external');
     addpath('./flow_lib');
     addpath('./devkit');
     addpath('./devkit/utils');

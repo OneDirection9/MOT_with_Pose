@@ -9,7 +9,7 @@ import os
 import codecs
 import argparse
 import subprocess
-
+import shutil
 
 def allFiles(root):
     files = []
@@ -33,6 +33,10 @@ def deleteVideoName(path):
 
 def convert(source_file, save_dir):
     det_file = codecs.open(source_file, 'r', 'utf-8')
+
+    if os.path.exists(save_dir):
+        shutil.rmtree(save_dir)
+    os.mkdir(save_dir)
 
     result = dict()
 
