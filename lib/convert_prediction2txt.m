@@ -42,6 +42,7 @@ function [ ] = convert_prediction2txt( expidx, save_dir, annolist_test, predicti
             end
             cpeople = MultiScaleDetections.slice(people, indexs);
             people = MergeWithinFrame(people, cpeople, num_frames);
+            frame_indexs = people.frameIndex(indexs);
             
             for i = 1:num_
                 index = indexs(i);
@@ -49,6 +50,12 @@ function [ ] = convert_prediction2txt( expidx, save_dir, annolist_test, predicti
                 if isValid == 0
                     continue;
                 end
+                
+                frame_index = frame_indexs(i);
+                if vinfo.is_labeled(frame_index) == 0
+                    continue;
+                end
+                
                 bbox = people.unPos(index, :);
                 fidx = people.frameIndex(index, :);
                 fprintf(fsave, [num2str(fidx), ',']); % frame index
