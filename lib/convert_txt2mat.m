@@ -30,7 +30,6 @@ for i = 1:num_videos
     assert(exist(full_file, 'file') ~= 0);
     
     fprintf('Converting detection txt `%s` to mat. %d/%d\n', vname, i, num_videos);
-    vid_dir = fullfile(p.vidDir, vname);
     [names, xs, ys, ws, hs, scores] = textread(full_file, '%f%f%f%f%f%f');
     
     if ~isempty(vinfo.ignore_regions)
@@ -38,9 +37,8 @@ for i = 1:num_videos
         not_ignore = ones(1, num_det); % 1: not ignore.
         
         % read for img size.
-        frame_file = fullfile(vid_dir, '00001.jpg');
-        img = imread(frame_file);
-        img_size = size(img);
+        img_size = vinfo.img_size;
+        
         % calculate pair.
         [q1, q2] = meshgrid(1:img_size(1), 1:img_size(2));
         idxsAllrel = [ q1(:) q2(:)];
@@ -57,6 +55,7 @@ for i = 1:num_videos
 %             imshow(img);
             
             frame_mask = generateFrameMask(img_size(1:2), ignore_regions, idxsAllrel);
+            
             % calculate sub matrix for each detection
             det_idxs = find(names == fidx);
             det_xs = xs(det_idxs);
