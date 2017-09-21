@@ -1,6 +1,6 @@
 from utils import remove_group_box
 
-filename = 'posetrack_trainval_nms03_sc05.txt'
+filename = 'det_results_posetrack.txt'
 fout = open(filename + '_rmgroup.txt', 'wt')
 fout2 = open(filename + '_removed.txt', 'wt')
 
