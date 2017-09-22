@@ -20,4 +20,8 @@ source_dir = './data/source_annotations/val';
 save_mat_file = './data/annolist/test/annolist';
 convert_val2paper(source_dir, save_mat_file, save_dir, prefix, isSave);
 
+source_dir = './data/source_annotations/test/';
+save_mat_file = './data/annolist/last/annolist';
+convert_test2paper(source_dir, save_mat_file, save_dir, prefix, isSave);
+
 fprintf('Done!\n');

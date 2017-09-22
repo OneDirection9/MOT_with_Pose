@@ -7,7 +7,7 @@ def remove_group_box(boxes, overlap_thresh=0.5, score_thresh=0.5, cover_box_num_
   removed_boxes = []
 
   for box in boxes:
-    x1, y1, w, h, _ = box
+    x1, y1, w, h, score = box
     x2, y2 = x1 + w - 1, y1 + h - 1
     cover_box_num = 0
 
@@ -20,10 +20,10 @@ def remove_group_box(boxes, overlap_thresh=0.5, score_thresh=0.5, cover_box_num_
         if overlap > overlap_thresh:
           cover_box_num += 1
 
-    if cover_box_num >= cover_box_num_thresh:
-      removed_boxes.append(box)
+    if score < score_thresh or cover_box_num >= cover_box_num_thresh:
+      removed_boxes.append(box[:])
     else:
-      keep_boxes.append(box)
+      keep_boxes.append(box[:])
 
   return keep_boxes, removed_boxes
 
