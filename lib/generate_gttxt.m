@@ -40,7 +40,7 @@ function [] = generate_gttxt( annolist_file, save_dir, usage, IOU_thresh )
         
         frame_mask = [];
         for fidx = 1:num_frames
-            if ~isempty(vinfo.ignore_regions)
+            if  isfield(vinfo, 'ignore_regions') && ~isempty(vinfo.ignore_regions)
                 ignore_regions = vinfo.ignore_regions{fidx};
                 if ~isempty(ignore_regions)
                     frame_mask = generateFrameMask(img_size(1:2), ignore_regions, idxsAllrel);
