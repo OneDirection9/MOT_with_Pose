@@ -10,13 +10,15 @@ import codecs
 import os
 import shutil
 
+import numpy as np
+
 
 def deleteVideoName(path):
     files = [x for x in os.listdir(path) if x.endswith('txt')]
 
     for file in files:
         file = os.path.join(path, file)
-        print("Converting %s" % file)
+        print("Deleting name and .jpg for %s" % file)
         os.system("sed -i -e 's/.*\///g' %s" % file)
         os.system("sed -i -e 's/.jpg//g' %s" % file)
 
@@ -47,14 +49,29 @@ def map(dir, box_save_dir, keypoint_save_dir):
         with open(file, 'r', encoding='utf-8') as f:
             lines = f.readlines()
             nums = len(lines)
-            count = 0;
+            assert nums % 16 == 0, 'Does not match 1:16.'
+
+            box_nums = int(nums / 16)
+            box_l = [_ for _ in range(box_nums)]
+            key_l = [[] for _ in range(box_nums)]
+            index = 0
             for i in range(0, nums, 16):
                 box = lines[i]
-                box_out.write(box)
-                count += 1
+                box_l[index] = box
                 for j in range(i + 1, i + 16):
-                    line = str(count) + ' ' + lines[j]
-                    keypoint_out.write(line)
+                    key_l[index].append(lines[j])
+                index += 1
+
+            npa = np.array(box_l)
+            arg_idx = np.argsort(npa)
+            count = 0
+            for i in range(box_nums):
+                id = arg_idx[i]
+                count += 1
+                box_out.write(box_l[id])
+                for line in key_l[id]:
+                    keypoint_out.write(str(count) + ' ' + line)
+
         box_out.close()
         keypoint_out.close()
 
@@ -81,7 +98,7 @@ def convert(file, save_dir, box_save_dir, key_save_dir):
 
             for j in range(i, i + 16):
                 if j > nums or (j != i and '/' in lines[j]):
-                    assert False, 'Does not match.'
+                    assert False, 'Does not match 1:16.'
                 result[vidx].append(lines[j])
 
     for key, value in result.items():
@@ -93,6 +110,7 @@ def convert(file, save_dir, box_save_dir, key_save_dir):
 
     deleteVideoName(save_dir)
     map(save_dir, box_save_dir, key_save_dir)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser("Need source file and save directory.")
