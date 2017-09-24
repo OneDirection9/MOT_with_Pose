@@ -45,13 +45,15 @@ def convert(source_file, save_dir):
         if not result.__contains__(vidx):
             result[vidx] = []
         result[vidx].append(line)
+    det_file.close()
 
     for key, value in result.items():
         save_file = os.path.join(save_dir, key + '.txt')
-        output = codecs.open(save_file, 'w', 'utf-8')
+        output = codecs.open(save_file, 'w', 'utf-8', buffering=0)
 
         for line in value:
             output.write(line)
+        output.close()
 
     deleteVideoName(save_dir)
 

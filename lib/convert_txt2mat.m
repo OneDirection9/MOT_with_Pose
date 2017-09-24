@@ -32,7 +32,7 @@ for i = 1:num_videos
     fprintf('Converting detection txt `%s` to mat. %d/%d\n', vname, i, num_videos);
     [names, xs, ys, ws, hs, scores] = textread(full_file, '%f%f%f%f%f%f');
     
-    if ~isempty(vinfo.ignore_regions)
+    if false && ~isempty(vinfo.ignore_regions)
         num_det = size(names, 1);
         not_ignore = ones(1, num_det); % 1: not ignore.
         

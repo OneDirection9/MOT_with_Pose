@@ -8,7 +8,7 @@ p = bbox_exp_params(expidx);
 if(~p.useGT)
     % convert *.txt to *.mat
     fprintf('Use dection to track.\n');
-    convert_txt2mat(p);
+    % convert_txt2mat(p);
 else
     % getnerate detections mat from annolist.bbox.
     fprintf('Use ground truth to track.\n');
@@ -26,11 +26,11 @@ start_index = 1;
 num_videos = 30;
 
 % multiple object tracking
-% bbox_tracking(2, start_index, num_videos, false, true);
+bbox_tracking(2, start_index, num_videos, false, true);
  
 % convert prediction to txt format follow MOT15 format.
 curSaveDir = fullfile(p.expDir, 'prune_tmp');
-% convert_prediction2txt( expidx, p.motPredictionSaveDir, p.testGT, p.ptMulticutDir, p.pruneThresh, curSaveDir);
+convert_prediction2txt( expidx, p.motPredictionSaveDir, p.testGT, p.ptMulticutDir, p.pruneThresh, curSaveDir);
 
 % evaluate the performance.
 benchmarkDir = p.motDir;
@@ -41,10 +41,10 @@ allMets = evaluateTracking(seqfile, p.motPredictionSaveDir, benchmarkDir, vidDir
 
 % visualize bad case.
 total_videos = size(allMets.mets2d, 2);
-for vidx = 15:total_videos
+for vidx = 1:total_videos
     res = allMets.mets2d(vidx);
     if res.m(end-2) < 50
-        % bbox_vis_people(expidx, vidx, curSaveDir);
-        bbox_vis_people(expidx, vidx);
+        bbox_vis_people(expidx, vidx, curSaveDir);
+        % bbox_vis_people(expidx, vidx);
     end
 end
