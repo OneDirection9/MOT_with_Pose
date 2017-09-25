@@ -69,8 +69,9 @@ def map(dir, box_save_dir, keypoint_save_dir):
                 id = arg_idx[i]
                 count += 1
                 box_out.write(box_l[id])
+                frame_idx = box_l[id].split(' ')[0]
                 for line in key_l[id]:
-                    keypoint_out.write(str(count) + ' ' + line)
+                    keypoint_out.write(str(count) + ' ' + frame_idx + ' ' + line)
 
         box_out.close()
         keypoint_out.close()
