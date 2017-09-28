@@ -88,24 +88,24 @@ for i = 1:num_videos
     
     % convert `full_file` to mat.
     % fields: unPos, unProb, frameIndex, index, scale, partClass.
-    box_detections = struct();
-    box_detections.unPos = [xs, ys, ws, hs];
+    detections = struct();
+    detections.unPos = [xs, ys, ws, hs];
     
     scores = min(1 - 1e-15, scores);
     scores = max(1e-15, scores);
-    box_detections.unProb = scores;
-    box_detections.frameIndex = names;
-    box_detections.index = [1:size(names,1)]';
-    box_detections.cand = [1:size(names,1)]';
-    box_detections.scale = ones(size(names,1), 1);
-    box_detections.partClass = zeros(size(names,1), 1);
+    detections.unProb = scores;
+    detections.frameIndex = names;
+    detections.index = [1:size(names,1)]';
+    detections.cand = [1:size(names,1)]';
+    detections.scale = ones(size(names,1), 1);
+    detections.partClass = zeros(size(names,1), 1);
 
     % save as the mat.
     file_name = deblank(file_name);
     splits = regexp(file_name, '\.', 'split'); % 000001.txt_result.txt => [000001, txt_result, txt]
     save_name = splits{1};
     full_save = fullfile(save_dir, save_name);
-    save(full_save, 'box_detections');
+    save(full_save, 'detections');
 end
 
 fprintf('Convert detection .txt to .mat, done.\n');
