@@ -1,9 +1,8 @@
 clear;
 clc;
 
-% % get parameters.
-% expidx = 2;
-% p = bbox_exp_params(expidx);
+log_file = './data/dm_loss.log';
+fsave = fopen(log_file, 'w');
 
 test_annolist_dir = './data/annolist/test/annolist';
 % test_annolist_dir = './data/annolist/last/annolist';
@@ -51,8 +50,14 @@ for vidx = 1:num_videos
         [~, f2_name, ~] = fileparts(f2);
         
         dm_file_name = [ f1_name '_' f2_name '.txt'];
-        full_pair_file = fullfile(dm_dir, dm_file_name);
-        assert(exist(full_pair_file, 'file') == 2, 'Deepmatch for %s does not exist.', full_pair_file);
+        full_dm_file = fullfile(dm_dir, dm_file_name);
+        assert(exist(full_dm_file, 'file') == 2, 'Deepmatch for %s does not exist.', full_dm_file);
+        
+        file_info = dir(full_dm_file);
+        if(file_info.bytes == 0)
+            fprintf(fsave, '%d\t%d\t%d\t%s\t%s\n', vidx, pair(1), pair(2), f1_name, f2_name);
+            fprintf('%d\t%d\t%d\t%s\t%s\n', vidx, pair(1), pair(2), f1_name, f2_name);
+        end
     end
     
 end
