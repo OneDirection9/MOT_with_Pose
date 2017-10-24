@@ -24,9 +24,11 @@ num_videos = length(annolist);
 
 num_frames = 0;
 num_persons = 0;
+num_fp = 0;
 for s=1:num_videos
     num_frames  = num_frames  + annolist(s).num_frames;
     num_persons = num_persons + annolist(s).num_persons;        
+    num_fp = num_fp + annolist(s).num_frames * annolist(s).num_persons; 
 end
 
 dim = 11;
@@ -39,8 +41,10 @@ if p.useReid
 end
 
 % initialize the arrays, otherwise too slow when using cat
-X_pos = zeros(num_frames*num_persons*nFeatSample*p.maxFrameDist,dim,'single');
-X_neg = zeros(num_frames*num_persons*nFeatSample*p.maxFrameDist,dim,'single');
+% X_pos = zeros(num_frames*num_persons*nFeatSample*p.maxFrameDist,dim,'single');
+% X_neg = zeros(num_frames*num_persons*nFeatSample*p.maxFrameDist,dim,'single');
+X_pos = zeros(num_fp*nFeatSample*p.maxFrameDist,dim,'single');
+X_neg = zeros(num_fp*nFeatSample*p.maxFrameDist,dim,'single');
 
 % example counter for each class
 n_pos = 0;

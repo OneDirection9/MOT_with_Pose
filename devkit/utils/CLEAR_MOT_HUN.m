@@ -122,7 +122,7 @@ if options.eval3d, matched=@matched3d; end
 
 alltracked=zeros(F,Ngt);
 allfalsepos=zeros(F,N);
-
+allfalseneg=zeros(F,N);
 for t=1:F
     g(t)=numel(find(gtInd(t,:)));
     

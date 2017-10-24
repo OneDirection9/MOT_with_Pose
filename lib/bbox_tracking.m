@@ -294,10 +294,11 @@ for vIdx = firstidx:lastidx
         prev_dets = copy_detections(out_dets);
         % people = bbox_compute_final_posetrack_predictions( out_dets );
         people = out_dets;
+        people.origin_index = origin_index;
         save(predFname, 'people');
     end 
     % visualise predictions
-    bbox_vis_people(expidx, vIdx);
+    % bbox_vis_people(expidx, vIdx);
 end  
 
 fprintf('done\n');
@@ -385,7 +386,6 @@ function dets = copy_detections(dets_src)
     if isfield(dets_src, 'partClass')
         dets.partClass = dets_src.partClass;
     end
-
 end
 
 

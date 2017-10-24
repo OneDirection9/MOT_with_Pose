@@ -103,7 +103,7 @@ for s=allSeq
     seqCnt=seqCnt+1;
     seqName = char(s);
     
-    fprintf('\t... %s\n',seqName);
+    fprintf('\t%d... %s\n',seqCnt, seqName);
     
     % if a result is missing, we cannot evaluate this tracker
     resFile = fullfile(resDir,[seqName '.txt']);
